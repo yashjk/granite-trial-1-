@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  before_action :load_task, only: [:show]
 
   def index
     @tasks = Task.all
@@ -11,16 +12,29 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      render status: :ok, json: { notice: 'Task was successfully created' }
+      flash[:success] = "Task was successfully created"
+      render status: :ok, json: { notice: 'Task was successfully created', id: @task.id }
     else
       render status: :unprocessable_entity, json: { error: @task.errors.full_messages }
     end
+  end
+
+  def show
+    render
   end
 
   private
 
   def task_params
     params.require(:task).permit(:description)
+  end
+
+  def load_task
+    @task = Task.where(id: params[:id]).first
+    unless @task
+      flash[:alert] = "No such task in your records!"
+      redirect_to controller: "tasks", action: "index"
+    end
   end
 
 end
