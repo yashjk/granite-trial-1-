@@ -1,20 +1,20 @@
 import React from "react";
 
 const List = ({ tasks }) => {
-  return(
+  return (
     <div className="container">
       <h1>Tasks List</h1>
       <div className="row">
         <div className="col-md-10">
-          { tasks && tasks.length ? (
+          {tasks && tasks.length ? (
             <ul className="list-group list-unstyled">
-              { tasks.map(task => {
-                return(
-                  <p>
-                    Task id : { task.id }
-                    <br />
-                    Task description: { task.description }
-                  </p>
+              {tasks.map((task, index) => {
+                return (
+                  <li key={index}>
+                    <a href={Routes.task_path(task.id)}>
+                      Task description: {task.description}
+                    </a>
+                  </li>
                 );
               })}
             </ul>
@@ -30,6 +30,6 @@ const List = ({ tasks }) => {
       </div>
     </div>
   );
-}
+};
 
 export default List;

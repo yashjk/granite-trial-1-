@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
-import API from '../../utils/API';
+//chapter 9 Displaying errors, props should be errors={errors.error}
+import React, { Component } from "react";
+import API from "../../utils/API";
+import Errors from "../shared/Errors";
 
 class New extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      description: ''
+      description: "",
+      errors: null,
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -16,52 +19,59 @@ class New extends Component {
     event.preventDefault();
     API.postNewTask({ task: { description: this.state.description } })
       .then(() => {
-        window.location.href = Routes.tasks_path();
+        window.location.href = Routes.tasks_path(response.id);
       })
-      .catch(error => {
-        if (error.text) {
-          error.text().then(err => {
-           console.error(err)
-          });
-        }
+      .catch((error) => {
+        error.json().then((errors) => {
+          this.setState({ ...this.state, errors });
+        });
       });
   }
 
   handleChange(event) {
     this.setState({
-      description: event.target.value
+      description: event.target.value,
     });
   }
 
   render() {
+    const { errors } = this.state;
     return (
-        <div className="container">
-          <div className="col-md-10 mx-auto pt-2">
-            <div className="row">
-              <h3 className="pb-3">Add Task</h3>
+      <div className="container">
+        <div className="row justify-content-center">
+          {errors && errors.length != 0 ? (
+            <div className="mt-4">
+              <Errors errors={errors.error} message="danger" />
             </div>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group row pt-3">
-                <label htmlFor="name" className="col-sm-2 col-form-label">
-                  <h5 className="text-secondary ">Description: </h5>
-                </label>
-                <div className="col-sm-10">
-                  <input type="text"
-                    className="form-control"
-                    onChange={this.handleChange}
-                    value={this.state.description}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group row pt float-right pr-3">
-                <button className="btn btn-md btn-primary" type="submit">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+          ) : null}
         </div>
+
+        <div className="col-md-10 mx-auto pt-2">
+          <div className="row">
+            <h3 className="pb-3">Add Task</h3>
+          </div>
+          <form onSubmit={this.onSubmit}>
+            <div className="form-group row pt-3">
+              <label htmlFor="name" className="col-sm-2 col-form-label">
+                <h5 className="text-secondary ">Description: </h5>
+              </label>
+              <div className="col-sm-10">
+                <input
+                  type="text"
+                  className="form-control"
+                  onChange={this.handleChange}
+                  value={this.state.description}
+                />
+              </div>
+            </div>
+            <div className="form-group row pt float-right pr-3">
+              <button className="btn btn-md btn-primary" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     );
   }
 }
