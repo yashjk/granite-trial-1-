@@ -17,16 +17,20 @@ class New extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    API.postNewTask({ task: { description: this.state.description } })
-      .then((response) => {
+    fetchApi({
+      url: Routes.tasks_path(),
+      method: "POST",
+      body: {
+        task: { description: this.state.description },
+      },
+      onError: this.handleError,
+      onSuccess: (response) => {
+        console.log(response);
+      },
+      successCallBack: (response) => {
         window.location.href = Routes.task_path(response.id);
-      })
-      .catch((error) => {
-        console.log(error);
-        error.json().then(({ errors }) => {
-          this.setState({ ...this.state, errors });
-        });
-      });
+      },
+    });
   }
 
   handleChange(event) {

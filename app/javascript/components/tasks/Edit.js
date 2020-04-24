@@ -29,7 +29,7 @@ class Edit extends Component {
     e.preventDefault();
     fetchApi({
       url: Routes.task_path(this.props.task.id),
-      method: "PATCH",+
+      method: "PATCH",
       body: { description: this.state.description },
       onError: this.handleError,
       onSuccess: (response) => {
