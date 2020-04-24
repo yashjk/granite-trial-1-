@@ -18,11 +18,12 @@ class New extends Component {
   onSubmit(event) {
     event.preventDefault();
     API.postNewTask({ task: { description: this.state.description } })
-      .then(() => {
-        window.location.href = Routes.tasks_path(response.id);
+      .then((response) => {
+        window.location.href = Routes.task_path(response.id);
       })
       .catch((error) => {
-        error.json().then((errors) => {
+        console.log(error);
+        error.json().then(({ errors }) => {
           this.setState({ ...this.state, errors });
         });
       });
