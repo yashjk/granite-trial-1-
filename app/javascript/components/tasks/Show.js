@@ -16,6 +16,7 @@ class Show extends Component {
               >
                 Edit
               </a>
+              <a className="ml-2 btn btn-sm btn-warning">Delete</a>
             </div>
           </div>
         </div>
