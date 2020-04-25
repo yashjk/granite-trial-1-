@@ -1,6 +1,6 @@
 //chapter 9 Displaying errors, props should be errors={errors.error}
 import React, { Component } from "react";
-import API from "../../utils/API";
+import { fetchApi } from "../../utils/API";
 import Errors from "../shared/Errors";
 
 class New extends Component {
