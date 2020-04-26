@@ -23,7 +23,9 @@ class New extends Component {
       body: {
         task: { description: this.state.description },
       },
-      onError: this.handleError,
+      onError: (response) => {
+        console.log(response);
+      },
       onSuccess: (response) => {
         console.log(response);
       },
