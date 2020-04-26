@@ -10,7 +10,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = @user.tasks.new(task_params)
     if @task.save
       flash[:success] = "Task was successfully created"
       render status: :ok, json: { notice: 'Task was successfully created', id: @task.id }
@@ -48,7 +48,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:description)
+    params.require(:task).permit(:description, :assignee_id)
   end
 
   def load_task
@@ -58,5 +58,14 @@ class TasksController < ApplicationController
       redirect_to controller: "tasks", action: "index"
     end
   end
+
+  def load_user
+    begin
+      @user = User.find(task_params[:assignee_id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:alert] = "No such user found!"
+    end
+  end
+
 
 end
