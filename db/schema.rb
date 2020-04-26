@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_26_103957) do
+ActiveRecord::Schema.define(version: 2020_04_26_105604) do
 
   create_table "tasks", force: :cascade do |t|
     t.text "description", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "assignee_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -24,4 +25,5 @@ ActiveRecord::Schema.define(version: 2020_04_26_103957) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "tasks", "users", column: "assignee_id", on_delete: :cascade
 end
