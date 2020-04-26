@@ -5,6 +5,7 @@ ruby '2.7.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
+gem 'bcrypt', '~> 3.1.7'
 gem 'bootstrap'
 gem 'react-rails'
 gem 'js-routes', '~> 1.3'
