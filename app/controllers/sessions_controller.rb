@@ -14,5 +14,10 @@ class SessionsController < ApplicationController
       render status: :not_found, json: { notice: 'Invalid credentials, try again' }
     end
   end
+
+  def destroy
+    session.delete(:user_id)
+    flash[:warning] = "Logged out!"
+  end
   
 end
