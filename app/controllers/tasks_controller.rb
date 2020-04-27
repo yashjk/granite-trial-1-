@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :load_task, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_user_logged_in
 
   def index
     @tasks = Task.all
