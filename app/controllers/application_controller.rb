@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
-
   helper_method :logged_in?, :current_user
-  
+  include Pundit
+
   private
 
   def ensure_user_logged_in
