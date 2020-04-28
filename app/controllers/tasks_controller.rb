@@ -11,7 +11,9 @@ class TasksController < ApplicationController
   end
 
   def create
+    @user = User.find(task_params[:assignee_id])
     @task = @user.tasks.new(task_params)
+    @task.creator_id = @current_user.id
     if @task.save
       flash[:success] = "Task was successfully created"
       render status: :ok, json: { notice: 'Task was successfully created', id: @task.id }
