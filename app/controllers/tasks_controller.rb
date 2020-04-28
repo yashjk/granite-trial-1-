@@ -3,7 +3,7 @@ class TasksController < ApplicationController
   before_action :ensure_user_logged_in
 
   def index
-    @tasks = Task.all
+    @tasks = policy_scope(Task)
   end
 
   def new
@@ -11,41 +11,43 @@ class TasksController < ApplicationController
   end
 
   def create
-    @user = User.find(task_params[:assignee_id])
+    @user = User.find(user_params[:user_id])
     @task = @user.tasks.new(task_params)
+    authorize @task
     @task.creator_id = @current_user.id
-    if @task.save
-      flash[:success] = "Task was successfully created"
-      render status: :ok, json: { notice: 'Task was successfully created', id: @task.id }
+
+    if @task.valid?
+      @task.save
+      redirect_to task_url(@task)
     else
-      render status: :unprocessable_entity, json: { error: @task.errors.full_messages }
+      render new
     end
   end
 
   def show
-    render
+    @task = Task.find(params[:id])
+    authorize @task
   end
 
   def edit
-    render
+    @task = Task.find(params[:id])
+    authorize @task
   end
 
   def update
+    @task = Task.find(params[:id])
+    authorize @task
+
     if @task.update_attributes(task_params)
-      flash[:success] = "Successfully updated task."
-      render status: :ok, json: { notice: "Successfully updated task." }
-    else
-      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
+      redirect_to @task
     end
   end
 
   def destroy
-    if @task.destroy
-      flash[:success] = "Task successfully deleted."
-      render status: :ok, json: { notice: "Successfully deleted task" }
-    else
-      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
-    end
+    @task = Task.find(params[:id])
+    authorize @task
+    @task.destroy
+    redirect_to tasks_url
   end
 
   private
